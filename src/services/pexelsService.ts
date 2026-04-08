@@ -38,26 +38,26 @@ function getPexelsApiKey(): string {
  */
 export async function getAnimalImage(animalName: string): Promise<string> {
   const normalizedName = normalizeAnimalName(animalName)
-  const [firstWord = ''] = normalizedName.split(/\s+/)
-  const query = firstWord || normalizedName
+  const [firstQueryTerm = ''] = normalizedName.split(/\s+/)
+  const searchQuery = firstQueryTerm || normalizedName
 
-  if (!query) {
+  if (!searchQuery) {
     return FALLBACK_IMAGE_URL
   }
 
-  const cached = animalImageCache.get(query)
+  const cached = animalImageCache.get(searchQuery)
   if (cached) {
     return cached
   }
 
   const apiKey = getPexelsApiKey()
   if (!apiKey) {
-    animalImageCache.set(query, FALLBACK_IMAGE_URL)
+    animalImageCache.set(searchQuery, FALLBACK_IMAGE_URL)
     return FALLBACK_IMAGE_URL
   }
 
   try {
-    const params = new URLSearchParams({ query, per_page: '1' })
+    const params = new URLSearchParams({ query: searchQuery, per_page: '1' })
     const response = await fetch(`${PEXELS_API_URL}?${params.toString()}`, {
       headers: {
         Authorization: apiKey,
@@ -84,10 +84,10 @@ export async function getAnimalImage(animalName: string): Promise<string> {
       data.photos?.[0]?.src?.original ??
       FALLBACK_IMAGE_URL
 
-    animalImageCache.set(query, imageUrl)
+    animalImageCache.set(searchQuery, imageUrl)
     return imageUrl
   } catch {
-    animalImageCache.set(query, FALLBACK_IMAGE_URL)
+    animalImageCache.set(searchQuery, FALLBACK_IMAGE_URL)
     return FALLBACK_IMAGE_URL
   }
 }

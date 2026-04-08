@@ -11,12 +11,11 @@ const IMAGE_LOADING_TEXT = 'Cargando imagen...'
  */
 function AnimalCard({ animal }) {
   const [imageState, setImageState] = useState(() => ({
-    name: animal.name,
+    name: '',
     url: FALLBACK_IMAGE_URL,
-    loading: true,
   }))
 
-  const isImageLoading = imageState.name !== animal.name || imageState.loading
+  const isImageLoading = imageState.name !== animal.name
   const imageUrl = imageState.name === animal.name ? imageState.url : FALLBACK_IMAGE_URL
 
   useEffect(() => {
@@ -28,16 +27,6 @@ function AnimalCard({ animal }) {
           setImageState({
             name: animal.name,
             url,
-            loading: false,
-          })
-        }
-      })
-      .catch(() => {
-        if (isMounted) {
-          setImageState({
-            name: animal.name,
-            url: FALLBACK_IMAGE_URL,
-            loading: false,
           })
         }
       })
