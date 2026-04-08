@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import styles from './AnimalCard.module.css'
 import { FALLBACK_IMAGE_URL, getAnimalImage } from '../../../services/pexelsService'
 
+const IMAGE_LOADING_TEXT = 'Cargando imagen...'
+
 /**
  * @param {{
  *  animal: { id: number, name: string, breed: string, type: string }
@@ -30,18 +32,12 @@ function AnimalCard({ animal }) {
           })
         }
       })
-      .finally(() => {
+      .catch(() => {
         if (isMounted) {
-          setImageState((currentState) => {
-            if (currentState.name === animal.name) {
-              return currentState
-            }
-
-            return {
-              name: animal.name,
-              url: FALLBACK_IMAGE_URL,
-              loading: false,
-            }
+          setImageState({
+            name: animal.name,
+            url: FALLBACK_IMAGE_URL,
+            loading: false,
           })
         }
       })
@@ -54,7 +50,7 @@ function AnimalCard({ animal }) {
   return (
     <li className={styles.card}>
       <div className={styles.imageContainer}>
-        {isImageLoading && <span className={styles.loading}>Cargando imagen...</span>}
+        {isImageLoading && <span className={styles.loading}>{IMAGE_LOADING_TEXT}</span>}
         <img
           className={styles.image}
           src={imageUrl}
