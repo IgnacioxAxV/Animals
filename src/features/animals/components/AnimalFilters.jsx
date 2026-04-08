@@ -1,5 +1,17 @@
 import styles from './AnimalFilters.module.css'
 
+/**
+ * @param {{
+ *  breedValue: string,
+ *  typeValue: string,
+ *  typeOptions: Array<{ value: string, label: string }>,
+ *  onBreedChange: (value: string) => void,
+ *  onTypeChange: (value: string) => void,
+ *  breedLabel: string,
+ *  breedPlaceholder: string,
+ *  typeLabel: string
+ * }} props
+ */
 function AnimalFilters({
   breedValue,
   typeValue,

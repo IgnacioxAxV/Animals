@@ -45,7 +45,7 @@ function App() {
         pluralText={APP_TEXTS.resultsPlural}
       />
 
-      <AnimalList animals={filteredAnimals} />
+      {filteredAnimals.length > 0 && <AnimalList animals={filteredAnimals} />}
     </main>
   )
 }
