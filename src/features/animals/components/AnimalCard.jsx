@@ -30,6 +30,14 @@ function AnimalCard({ animal }) {
           })
         }
       })
+      .catch(() => {
+        if (isMounted) {
+          setImageState({
+            name: animal.name,
+            url: FALLBACK_IMAGE_URL,
+          })
+        }
+      })
 
     return () => {
       isMounted = false

@@ -38,8 +38,7 @@ function getPexelsApiKey(): string {
  */
 export async function getAnimalImage(animalName: string): Promise<string> {
   const normalizedName = normalizeAnimalName(animalName)
-  const [firstQueryTerm = ''] = normalizedName.split(/\s+/)
-  const searchQuery = firstQueryTerm || normalizedName
+  const searchQuery = normalizedName.split(/\s+/)[0] ?? ''
 
   if (!searchQuery) {
     return FALLBACK_IMAGE_URL
