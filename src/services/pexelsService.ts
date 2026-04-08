@@ -3,6 +3,18 @@ export const FALLBACK_IMAGE_URL = 'https://via.placeholder.com/400x300'
 
 const animalImageCache = new Map<string, string>()
 
+function isDevelopmentEnvironment(): boolean {
+  if (typeof import.meta !== 'undefined' && import.meta.env) {
+    return Boolean(import.meta.env.DEV)
+  }
+
+  if (typeof process !== 'undefined' && process.env) {
+    return process.env.NODE_ENV !== 'production'
+  }
+
+  return false
+}
+
 /**
  * Normalizes an animal name:
  * - lowercase
@@ -86,7 +98,7 @@ export async function getAnimalImage(animalName: string): Promise<string> {
     animalImageCache.set(searchQuery, imageUrl)
     return imageUrl
   } catch (error) {
-    if (typeof import.meta !== 'undefined' && import.meta.env?.DEV) {
+    if (isDevelopmentEnvironment()) {
       console.error('Failed to fetch animal image from Pexels:', error)
     }
     animalImageCache.set(searchQuery, FALLBACK_IMAGE_URL)
