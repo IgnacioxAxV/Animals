@@ -38,7 +38,7 @@ function getPexelsApiKey(): string {
  */
 export async function getAnimalImage(animalName: string): Promise<string> {
   const normalizedName = normalizeAnimalName(animalName)
-  const searchQuery = normalizedName.split(/\s+/)[0] ?? ''
+  const searchQuery = normalizedName
 
   if (!searchQuery) {
     return FALLBACK_IMAGE_URL
@@ -85,7 +85,10 @@ export async function getAnimalImage(animalName: string): Promise<string> {
 
     animalImageCache.set(searchQuery, imageUrl)
     return imageUrl
-  } catch {
+  } catch (error) {
+    if (typeof import.meta !== 'undefined' && import.meta.env?.DEV) {
+      console.error('Failed to fetch animal image from Pexels:', error)
+    }
     animalImageCache.set(searchQuery, FALLBACK_IMAGE_URL)
     return FALLBACK_IMAGE_URL
   }
